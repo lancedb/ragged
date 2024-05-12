@@ -1,0 +1,57 @@
+[project]
+name = "ragged"
+version = "0.1.dev0"
+dependencies = [
+    "lancedb",
+    "pandas",
+]
+dev-dependencies = [
+    "pytest",
+    "transformers"
+    ]
+description = "ragged"
+license = { file = "LICENSE" }
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = [
+    "data-science",
+    "machine-learning",
+    "data-analytics",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+
+[project.urls]
+repository = "https://github.com/lancedb/lancedb"
+
+[project.optional-dependencies]
+dataset_providers = [
+    "llama-index"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers --ignore-glob=lancedb/embeddings/*.py"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "asyncio",
+    "s3_test"
+]
