@@ -6,7 +6,7 @@ dependencies = [
     "pandas",
     "streamlit",
 ]
-dev-dependencies = [
+dev = [
     "pytest",
     "transformers"
     ]
