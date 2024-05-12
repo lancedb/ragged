@@ -6,10 +6,12 @@ dependencies = [
     "pandas",
     "streamlit",
 ]
+[project.optional-dependencies]
 dev = [
     "pytest",
     "transformers"
     ]
+
 description = "ragged"
 license = { file = "LICENSE" }
 readme = "README.md"
