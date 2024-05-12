@@ -35,20 +35,20 @@ def embedding_provider_options():
         "sentence-transformers": ["all-MiniLM-L12-v2", "all-MiniLM-L6-v2", "all-MiniLM-L12-v1", "BAAI/bge-small-en-v1.5", "BAAI/bge-large-en-v1.5"],
     }
 
-def is_wandb_installed():
+def safe_import_wandb():
     try:
         import wandb
         from wandb import __version__
-        return True
+        return wandb
     except ImportError:
-        return False
+        return None
     
 def init_wandb(dataset: str, embed_model: str):
-    if not is_wandb_installed():
+    wandb = safe_import_wandb()
+    if wandb is None:
         st.error("Please install wandb to log metrics using `pip install wandb`")
         return
-    import wandb
-    wandb.init(project=f"ragged-vectordb", name=f"{dataset}-{embed_model}") if wandb.run is None else None
+    run = wandb.init(project=f"ragged-vectordb", name=f"{dataset}-{embed_model}") if wandb.run is None else None
 
 def eval_retrieval():
     st.title("Retrieval Evaluator Quickstart")
@@ -81,7 +81,7 @@ def eval_retrieval():
     with col1:
         query_type = st.selectbox("Select a query type", [qt for qt in QueryType.__dict__.keys() if not qt.startswith("__")], placeholder="Choose a query type")
     with col2:
-        log_wandb = st.checkbox("Log to Wandb and plot in real-time", value=False)
+        log_wandb = st.checkbox("Log to WandB and plot in real-time", value=False)
 
     
     eval_button = st.button("Evaluate")
@@ -106,23 +106,26 @@ def eval_retrieval():
                 st.metric(label=k, value=v)
         
         if log_wandb:
-            init_wandb(dataset, embed_model)
-            if not is_wandb_installed():
+            wandb = safe_import_wandb()
+            if wandb is None:
                 st.error("Please install wandb to log metrics using `pip install wandb`")
                 return
-            import wandb
+            init_wandb(dataset, embed_model)
             wandb.log(results.model_dump())
 
     
     if log_wandb:
         st.title("Wandb Project Page")
-        if not is_wandb_installed():
+        wandb = safe_import_wandb()
+        if wandb is None:
             st.error("Please install wandb to log metrics using `pip install wandb`")
             return
-        import wandb
         init_wandb(dataset, embed_model)
-        print(wandb.run.get_project_url())
-        components.iframe(wandb.run.get_project_url())
+        project_url = wandb.run.get_project_url()
+        st.markdown("""
+        Visit the WandB project page to view the metrics in real-time.
+        [WandB Project Page]({project_url})
+        """)
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ version = "0.1.dev0"
 dependencies = [
     "lancedb",
     "pandas",
+    "streamlit",
 ]
 dev-dependencies = [
     "pytest",
@@ -55,3 +56,5 @@ markers = [
     "asyncio",
     "s3_test"
 ]
+[project.scripts]
+ragged = "ragged.cli.entry_point:cli"
