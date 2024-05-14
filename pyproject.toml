@@ -5,6 +5,7 @@ dependencies = [
     "lancedb",
     "pandas",
     "streamlit",
+    "datasets",
 ]
 
 description = "ragged"
