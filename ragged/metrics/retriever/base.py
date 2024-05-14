@@ -8,7 +8,8 @@ from tqdm import tqdm
 import logging
 import sys
 
-#logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logger = logging.getLogger("lancedb")
+logger.setLevel(logging.INFO)
 
 class Metric(ABC):
     def __init__(self, 
@@ -32,7 +33,7 @@ class Metric(ABC):
         self.table = None
     
     @abstractmethod
-    def ingest_docs(self):
+    def ingest_docs(self, batched: bool = False, use_existing_table: bool = False):
         """
         Ingest documents into the database and initialize the table
         """
@@ -51,7 +52,12 @@ class Metric(ABC):
         """
         pass
 
-    def evaluate(self, top_k: int, create_index: bool = False, query_type=QueryType.VECTOR) -> RetriverResult:
+    def evaluate(self,
+                 top_k: int, 
+                 create_index: bool = False, 
+                 query_type=QueryType.VECTOR, 
+                 batched: bool = False,
+                 use_existing_table: bool = False) -> RetriverResult:
         """
         Run evaluaion
 
@@ -64,10 +70,9 @@ class Metric(ABC):
             Type of query to run. Default is QueryType.VECTOR. 
             If "all" is passed, all query types will be evaluated
         """
-        self.ingest_docs()
+        self.ingest_docs(batched, use_existing_table)
         if create_index:
-            # TODO: Create index
-            pass
+            self.table.create_index(metric="L2", num_partitions=256, num_sub_vectors=96)
 
         self.table.create_fts_index("text", replace=True)
 
@@ -75,14 +80,18 @@ class Metric(ABC):
         if query_type == "all":
             # Evaluate all query types with progress
             for qt in [QueryType.VECTOR, QueryType.FTS, QueryType.RERANK_VECTOR, QueryType.RERANK_FTS, QueryType.HYBRID]:
-                logging.info(f"Evaluating query type: {qt}")
+                logger.info(f"Evaluating query type: {qt}")
+                if self.reranker is None and qt in [QueryType.RERANK_VECTOR, QueryType.RERANK_FTS, QueryType.HYBRID]:
+                    logger.warning(f"Reranker is not provided. Skipping query type: {qt}")
+                    continue
                 results[qt] = self.evaluate_query_type(top_k=top_k, query_type=qt)
+                logger.info(f"Hit rate for {qt}: {results[qt]}")
             return RetriverResult(**results)
             
         if query_type == "auto":
             query_type = deduce_query_type(query_type, self.reranker)
         
-        logging.info(f"Evaluating query type: {query_type}")
+        logger.info(f"Evaluating query type: {query_type}")
         results[query_type] = self.evaluate_query_type(top_k=top_k, query_type=query_type)
 
         return RetriverResult(**results)

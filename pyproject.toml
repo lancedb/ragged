@@ -4,11 +4,11 @@ version = "0.1.dev0"
 dependencies = [
     "lancedb",
     "pandas",
+    "streamlit",
+    "datasets",
+    "tantivy"
 ]
-dev-dependencies = [
-    "pytest",
-    "transformers"
-    ]
+
 description = "ragged"
 license = { file = "LICENSE" }
 readme = "README.md"
@@ -17,6 +17,7 @@ keywords = [
     "data-science",
     "machine-learning",
     "data-analytics",
+
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -39,8 +40,12 @@ classifiers = [
 repository = "https://github.com/lancedb/lancedb"
 
 [project.optional-dependencies]
-dataset_providers = [
-    "llama-index"
+dev = [
+    "llama-index",
+    "pytest",
+    "transformers",
+    "torch",
+    "sentence-transformers",
 ]
 
 [build-system]
@@ -55,3 +60,5 @@ markers = [
     "asyncio",
     "s3_test"
 ]
+[project.scripts]
+ragged = "ragged.cli.entry_point:cli"

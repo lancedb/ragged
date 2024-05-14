@@ -1,4 +1,6 @@
-from typing import Optional
+from typing import List, Optional
+
+from ragged.dataset.base import TextNode
 from .base import Dataset
 import logging
 import os
@@ -38,24 +40,30 @@ class LlamaIndexDataset(Dataset):
 
         parser = SentenceSplitter()
         nodes = parser.get_nodes_from_documents(documents)
-        self.documents = nodes
+        self.documents = [TextNode(id=node.id_, text=node.text) for node in nodes]
 
     def to_pandas(self):
         return self.dataset.to_pandas()
     
+    def get_contexts(self) -> List[TextNode]:
+        return self.documents
+    
+    @property
+    def context_column_name(self):
+        return "reference_contexts"
+    
+    @property
+    def query_column_name(self):
+        return "query"
+    
     @staticmethod
     def available_datasets():
         return [
-                "PaulGrahamEssayDataset", 
                 "Uber10KDataset2021",
                 "MiniEsgBenchDataset",
                 "OriginOfCovid19Dataset",
-                "BraintrustCodaHelpDeskDataset",
-                "MiniCovidQaDataset",
-                "PatronusAIFinanceBenchDataset",
-                "BlockchainSolanaDataset",
                 "MiniTruthfulQADataset",
                 "Llama2PaperDataset",
-                "CovidQaDataset",
+                "OriginOfCovid19Dataset",
                 ]
     
