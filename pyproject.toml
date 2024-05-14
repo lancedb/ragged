@@ -16,8 +16,7 @@ keywords = [
     "data-science",
     "machine-learning",
     "data-analytics",
-    "torch",
-    "sentece-transformers",
+
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -43,7 +42,9 @@ repository = "https://github.com/lancedb/lancedb"
 dev = [
     "llama-index",
     "pytest",
-    "transformers"
+    "transformers",
+    "torch",
+    "sentece-transformers",
 ]
 
 [build-system]
