@@ -44,7 +44,7 @@ dev = [
     "pytest",
     "transformers",
     "torch",
-    "sentece-transformers",
+    "sentence-transformers",
 ]
 
 [build-system]
