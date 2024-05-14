@@ -1,19 +1,21 @@
 import json
 import streamlit as st
 import streamlit.components.v1 as components
-from ragged.dataset import LlamaIndexDataset
+from ragged.dataset import LlamaIndexDataset, SquadDataset
 from ragged.metrics.retriever import HitRate, QueryType
 from ragged.results import RetriverResult
 from lancedb.rerankers import CohereReranker, ColbertReranker, CrossEncoderReranker
 
 def dataset_provider_options():
     return {
-        "Llama-Index": LlamaIndexDataset
+        "Llama-Index": LlamaIndexDataset,
+        "Squad": SquadDataset
     }
 
 def datasets_options():
     return {
-        "Llama-Index": LlamaIndexDataset.available_datasets()
+        "Llama-Index": LlamaIndexDataset.available_datasets(),
+        "Squad": SquadDataset.available_datasets()
     }
 
 def metric_options():
@@ -23,6 +25,7 @@ def metric_options():
 
 def reranker_options():
     return {
+        "None": None,
         "CohereReranker": CohereReranker,
         "ColbertReranker": ColbertReranker,
         "CrossEncoderReranker": CrossEncoderReranker
@@ -30,7 +33,7 @@ def reranker_options():
 
 def embedding_provider_options():
     return {
-        "openai": ["text-embedding-ada-002", "ext-embedding-3-small", "text-embedding-3-large"],
+        "openai": ["text-embedding-ada-002", "text-embedding-3-small", "text-embedding-3-large"],
         "huggingface": ["BAAI/bge-small-en-v1.5", "BAAI/bge-large-en-v1.5"],
         "sentence-transformers": ["all-MiniLM-L12-v2", "all-MiniLM-L6-v2", "all-MiniLM-L12-v1", "BAAI/bge-small-en-v1.5", "BAAI/bge-large-en-v1.5"],
     }
@@ -82,6 +85,8 @@ def eval_retrieval():
         query_type = st.selectbox("Select a query type", [qt for qt in QueryType.__dict__.keys() if not qt.startswith("__")], placeholder="Choose a query type")
     with col2:
         log_wandb = st.checkbox("Log to WandB and plot in real-time", value=False)
+        use_existing_table = st.checkbox("Use existing table", value=False)
+        create_index = st.checkbox("Create index", value=False)
 
     
     eval_button = st.button("Evaluate")
@@ -89,7 +94,7 @@ def eval_retrieval():
     if eval_button:
         dataset = dataset_provider_options()[provider](dataset)
         reranker_kwargs = json.loads(kwargs)
-        reranker = reranker_options()[reranker](**reranker_kwargs)
+        reranker = reranker_options()[reranker](**reranker_kwargs) if reranker != "None" else None
         query_type = QueryType.__dict__[query_type]
         metric = metric_options()[metric](
             dataset,
@@ -98,7 +103,10 @@ def eval_retrieval():
             reranker=reranker
         )
 
-        results = metric.evaluate(top_k=top_k, query_type=query_type) 
+        results = metric.evaluate(top_k=top_k,
+                                  query_type=query_type,
+                                  create_index=create_index,
+                                  use_existing_table=use_existing_table) 
         total_metrics = len(results.model_dump())
         cols = st.columns(total_metrics)
         for idx, (k,v) in enumerate(results.model_dump().items()):

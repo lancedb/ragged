@@ -9,8 +9,10 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest",
-    "transformers"
+    "transformers",
+    "llama-index"
     ]
+
 
 description = "ragged"
 license = { file = "LICENSE" }
@@ -41,10 +43,6 @@ classifiers = [
 [project.urls]
 repository = "https://github.com/lancedb/lancedb"
 
-[project.optional-dependencies]
-dataset_providers = [
-    "llama-index"
-]
 
 [build-system]
 requires = ["hatchling"]
