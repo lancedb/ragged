@@ -6,13 +6,6 @@ dependencies = [
     "pandas",
     "streamlit",
 ]
-[project.optional-dependencies]
-dev = [
-    "pytest",
-    "transformers",
-    "llama-index"
-    ]
-
 
 description = "ragged"
 license = { file = "LICENSE" }
@@ -43,6 +36,12 @@ classifiers = [
 [project.urls]
 repository = "https://github.com/lancedb/lancedb"
 
+[project.optional-dependencies]
+dev = [
+    "llama-index",
+    "pytest",
+    "transformers"
+]
 
 [build-system]
 requires = ["hatchling"]
