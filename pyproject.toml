@@ -6,6 +6,7 @@ dependencies = [
     "pandas",
     "streamlit",
     "datasets",
+    "tantivy"
 ]
 
 description = "ragged"
@@ -16,7 +17,7 @@ keywords = [
     "data-science",
     "machine-learning",
     "data-analytics",
-    "tantivy"
+
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
