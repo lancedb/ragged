@@ -16,6 +16,8 @@ keywords = [
     "data-science",
     "machine-learning",
     "data-analytics",
+    "torch",
+    "sentece-transformers",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
