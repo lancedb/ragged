@@ -1,6 +1,6 @@
 # Ragged
 
-Simple utilities for piece-wise evaluation of LLM based chat and retrieval system.
+Simple utilities for piece-wise evaluation of LLM based chat and retrieval systems
 
 ### Setup
 Build from source
