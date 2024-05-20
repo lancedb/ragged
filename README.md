@@ -40,5 +40,31 @@ hit_rate = HitRate(
 print(hit_rate.evaluate(top_k=5, query_type="all")) # Evaliate all possible query types
 ```
 
-## Create custom Dataset, Metrics, Reranking connectors
-# TODO
+### Generate a custom semantic search dataset
+Most of popular toy datasets are not semantically challenging enough to evaluate the performance of LLM based retrieval systems. Most of them work well with simple BM25 based retrieval systems. To generate a custom dataset, that is semantically challenging, you can use the following code snippet.
+
+```python
+from ragged.dataset.gen.gen_retrieval_data import gen_query_context_dataset
+from ragged.inference_client import OpenAIInferenceClient
+
+clinet = OpenAIInferenceClient()
+df = gen_query_context_dataset(directory="data/source_files", inference_client=clinet)
+
+print(df.head())
+# save the dataframe
+df.to_csv("data.csv")
+```
+
+Now, you can evaluate this dataset using the `ragged --quickstart vectordb` GUI or via the API:
+```python
+from ragged.dataset.csv import CSVDataset
+from ragged.metrics.retriever import HitRate
+from lancedb.rerankers import CohereReranker
+
+data = CSVDataset(path="data.csv")
+reranker = CohereReranker()
+
+hit_rate = HitRate(data, reranker=reranker, embedding_registry_id="openai", embed_model_kwarg={"model":"text-embedding-3-small"})
+res = hit_rate.evaluate(top_k=5, query_type="all")
+print(res)
+```
