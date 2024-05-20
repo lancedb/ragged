@@ -17,7 +17,7 @@ class QueryConfigError(Exception):
     def __init__(self, message):
         self.message = message
         super().__init__(self.message)
-        
+
 
 def deduce_query_type(query_type: str, reranker: Optional[Reranker]):
     if query_type == QueryType.AUTO:

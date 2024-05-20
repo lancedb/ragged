@@ -1,7 +1,7 @@
 import json
 import streamlit as st
 import streamlit.components.v1 as components
-from ragged.dataset import LlamaIndexDataset, SquadDataset
+from ragged.dataset import LlamaIndexDataset, SquadDataset, CSVDataset
 from ragged.metrics.retriever import HitRate, QueryType
 from ragged.results import RetriverResult
 from lancedb.rerankers import CohereReranker, ColbertReranker, CrossEncoderReranker
@@ -9,13 +9,15 @@ from lancedb.rerankers import CohereReranker, ColbertReranker, CrossEncoderReran
 def dataset_provider_options():
     return {
         "Llama-Index": LlamaIndexDataset,
-        "Squad": SquadDataset
+        "Squad": SquadDataset,
+        "CSV": CSVDataset
     }
 
 def datasets_options():
     return {
         "Llama-Index": LlamaIndexDataset.available_datasets(),
-        "Squad": SquadDataset.available_datasets()
+        "Squad": SquadDataset.available_datasets(),
+        "CSV": CSVDataset.available_datasets()
     }
 
 def metric_options():
@@ -60,7 +62,11 @@ def eval_retrieval():
     with col1:
         provider = st.selectbox("Select a provider", datasets_options().keys(), placeholder="Choose a provider")
     with col2:
-        dataset = st.selectbox("Select a dataset", datasets_options()[provider], placeholder="Choose a dataset", disabled=provider is None)
+        if provider == "CSV":
+            # choose a csv file
+            dataset = st.file_uploader("Upload a CSV file", type=["csv"])
+        else:
+            dataset = st.selectbox("Select a dataset", datasets_options()[provider], placeholder="Choose a dataset", disabled=provider is None)
 
     col1, col2 = st.columns(2)
     with col1:
