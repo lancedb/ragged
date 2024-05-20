@@ -12,15 +12,17 @@ pip install -e .
 ### VectorDB retrieval eval
 ```
 ragged --quickstart vectordb
+```
 <details open>
   <summary>Demo</summary>
-  
+  <img src="https://github.com/lancedb/ragged/assets/15766192/ab1313ef-04f5-461e-8429-28a6d0bdc13c" width=550 height=600 />
+
 </details>
 
 ### Dataset Quality eval [Coming soon]
 
 ### End-to-End RAG eval [Coming soon]
-```
+
 
 ## API Usage
 ### VectorDB retrieval eval
@@ -76,3 +78,8 @@ hit_rate = HitRate(data, reranker=reranker, embedding_registry_id="openai", embe
 res = hit_rate.evaluate(top_k=5, query_type="all")
 print(res)
 ```
+
+### Dataset Quality eval [Coming soon]
+
+### End-to-End RAG eval [Coming soon]
+
