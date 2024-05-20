@@ -12,6 +12,14 @@ pip install -e .
 ### VectorDB retrieval eval
 ```
 ragged --quickstart vectordb
+<details open>
+  <summary>Demo</summary>
+  
+</details>
+
+### Dataset Quality eval [Coming soon]
+
+### End-to-End RAG eval [Coming soon]
 ```
 
 ## API Usage
@@ -42,7 +50,7 @@ print(hit_rate.evaluate(top_k=5, query_type="all")) # Evaliate all possible quer
 
 ### Generate a custom semantic search dataset
 Most of popular toy datasets are not semantically challenging enough to evaluate the performance of LLM based retrieval systems. Most of them work well with simple BM25 based retrieval systems. To generate a custom dataset, that is semantically challenging, you can use the following code snippet.
-
+NOTE: `directory` can contain pdfs, txt files or any other file format that can be handled by Llama-index directory reader.
 ```python
 from ragged.dataset.gen.gen_retrieval_data import gen_query_context_dataset
 from ragged.inference_client import OpenAIInferenceClient
