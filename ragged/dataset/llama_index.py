@@ -59,6 +59,10 @@ class LlamaIndexDataset(Dataset):
     def query_column_name(self):
         return "query"
     
+    @property
+    def answer_column_name(self):
+        return None
+    
     @staticmethod
     def available_datasets():
         return [

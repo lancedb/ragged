@@ -28,6 +28,10 @@ class SquadDataset(Dataset):
     @property
     def query_column_name(self):
         return "question"
+    
+    @property
+    def answer_column_name(self):
+        return None
 
     @staticmethod
     def available_datasets():
