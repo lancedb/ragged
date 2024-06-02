@@ -9,4 +9,10 @@ class RetriverResult(BaseModel):
     rerank_vector: float = -inf
     rerank_fts: float = -inf
     hybrid: float = -inf
-    
+
+class RAGResult(BaseModel):
+    faithfulness: float = -inf
+    answer_relevancy: float = -inf
+    context_precision: float = -inf
+    context_recall: float = -inf
+    harmfulness: float = -inf

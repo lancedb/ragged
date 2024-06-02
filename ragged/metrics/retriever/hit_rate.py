@@ -65,6 +65,7 @@ class HitRate(Metric):
             id: str
             text: str = embed_model.SourceField()
             vector: Vector(embed_model.ndims()) = embed_model.VectorField(default=None)
+            
         if use_existing_table and "documents" in db.table_names():
             logger.info("Using existing table")
             self.table = db["documents"]

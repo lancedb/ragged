@@ -18,6 +18,9 @@ class SquadDataset(Dataset):
     def get_contexts(self)->List[TextNode]:
         return self.documents
     
+    def get_queries(self) -> List[str]:
+        return self.dataset[self.query_column_name].tolist()
+    
     @property
     def context_column_name(self):
         return "context"
@@ -25,6 +28,10 @@ class SquadDataset(Dataset):
     @property
     def query_column_name(self):
         return "question"
+    
+    @property
+    def answer_column_name(self):
+        return None
 
     @staticmethod
     def available_datasets():

@@ -15,7 +15,17 @@ class Dataset(ABC):
     @abstractmethod
     def get_contexts(self)->List[TextNode]:
         pass
-
+    
+    @abstractmethod
+    def get_queries(self)->List[str]:
+        pass
+    
+    def get_ground_truths(self)->List[str]:
+        """
+        Optional to implement
+        """
+        return None
+    
     @staticmethod
     def available_datasets():
         """
@@ -31,4 +41,9 @@ class Dataset(ABC):
     @property
     @abstractmethod
     def query_column_name(self):
+        pass
+
+    @property
+    @abstractmethod
+    def answer_column_name(self):
         pass

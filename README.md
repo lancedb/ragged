@@ -55,7 +55,7 @@ Most of popular toy datasets are not semantically challenging enough to evaluate
 NOTE: `directory` can contain pdfs, txt files or any other file format that can be handled by Llama-index directory reader.
 ```python
 from ragged.dataset.gen.gen_retrieval_data import gen_query_context_dataset
-from ragged.inference_client import OpenAIInferenceClient
+fragged.dataset.gen.llm_calls import OpenAIInferenceClient
 
 clinet = OpenAIInferenceClient()
 df = gen_query_context_dataset(directory="data/source_files", inference_client=clinet)
