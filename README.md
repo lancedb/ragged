@@ -49,6 +49,29 @@ hit_rate = HitRate(
 #print(hit_rate.evaluate(top_k=5, query_type=QueryType.VECTOR)) # Evaluate vector search
 print(hit_rate.evaluate(top_k=5, query_type="all")) # Evaliate all possible query types
 ```
+### Evaluate across various query types and Rerankers
+```
+from ragged.dataset import CSVDataset, SquadDataset
+from ragged.rag import llamaIndexRAG
+from ragged.metrics.retriever.hit_rate import HitRate
+from lancedb.rerankers import LinearCombinationReranker
+from ragged.search_utils import QueryType
+import wandb
+
+dataset = SquadDataset()
+reranker = LinearCombinationReranker()
+hit_rate = HitRate(dataset, embedding_registry_id="sentence-transformers", embed_model_kwarg={"name": "tuned_model_4", "device": "cuda"})
+
+query_types = [QueryType.VECTOR]
+use_existing_table = False
+for query_type in query_types:
+    run = wandb.init(project="ragged_bench", name=f"Base_4")
+    hr = hit_rate.evaluate(5, query_type=query_type, use_existing_table=use_existing_table)
+    run.log({f"{query_type}": hr.model_dump()[f"{query_type}"]})
+    use_existing_table = True
+
+wandb.finish()
+```
 
 ### Generate a custom semantic search dataset
 Most of popular toy datasets are not semantically challenging enough to evaluate the performance of LLM based retrieval systems. Most of them work well with simple BM25 based retrieval systems. To generate a custom dataset, that is semantically challenging, you can use the following code snippet.
