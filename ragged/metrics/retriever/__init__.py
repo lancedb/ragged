@@ -1,2 +1,2 @@
 from .hit_rate import HitRate
-from .base import QueryType
+from .base import Metric
