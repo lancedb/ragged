@@ -15,7 +15,11 @@ logger = logging.getLogger("lancedb")
 logger.setLevel(logging.INFO)
 
 class HitRate(Metric):
-    def evaluate_query_type(self,query_type:str, top_k:5) -> float:
+    def evaluate_query_type(self,query_type:str, top_k:int = 5) -> float:
+        if not self.table:
+            self.ingest_docs()
+            self.table.create_fts_index("text", replace=True)
+
         eval_results = []
         ds = self.dataset.to_pandas()
         for idx in tqdm.tqdm(range(len(ds))):

@@ -16,3 +16,7 @@ class RAGResult(BaseModel):
     context_precision: float = -inf
     context_recall: float = -inf
     harmfulness: float = -inf
+
+class RerankerResult(BaseModel):
+    latency: float = -inf
+    delta_accuracy: float = -inf
