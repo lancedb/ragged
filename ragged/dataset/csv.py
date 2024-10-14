@@ -9,7 +9,15 @@ class CSVDataset(Dataset):
         self.dataset = pd.read_csv(path)
         # get unique contexts from the train dataframe
         contexts = self.dataset[context_column].unique()
-        self.documents = [TextNode(id=str(i), text=context) for i, context in enumerate(contexts)]
+
+        docs = []
+        for i, context in enumerate(contexts):
+            if isinstance(context, list):
+                docs.extend([TextNode(id=str(i+"_"+j), text=c) for j, c in enumerate(context)])
+            else:
+                docs.extend([TextNode(id=str(i), text=context)])
+        self documents = docs
+            
         self.context_column = context_column
         self.query_column = query_column
         self.answer_column = answer_column
