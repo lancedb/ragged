@@ -51,7 +51,7 @@ class LlamaIndexDataset(Dataset):
         return self.documents
 
     def get_queries(self) -> List[str]:
-        return self.dataset[self.query_column_name].tolist()
+        return self.to_pandas()[self.query_column_name].tolist()
     
     @property
     def context_column_name(self):
