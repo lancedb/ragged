@@ -16,7 +16,7 @@ class CSVDataset(Dataset):
                 docs.extend([TextNode(id=f"{i}_{j}", text=c) for j, c in enumerate(context)])
             else:
                 docs.extend([TextNode(id=str(i), text=context)])
-        self documents = docs
+        self.documents = docs
             
         self.context_column = context_column
         self.query_column = query_column
