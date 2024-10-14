@@ -13,7 +13,7 @@ class CSVDataset(Dataset):
         docs = []
         for i, context in enumerate(contexts):
             if isinstance(context, list):
-                docs.extend([TextNode(id=str(i+"_"+j), text=c) for j, c in enumerate(context)])
+                docs.extend([TextNode(id=f"{i}_{j}", text=c) for j, c in enumerate(context)])
             else:
                 docs.extend([TextNode(id=str(i), text=context)])
         self documents = docs
