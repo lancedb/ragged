@@ -15,7 +15,7 @@ except ImportError:
     raise ImportError("Please install the llama_index package by running `pip install llama_index`")
 
 class LlamaIndexDataset(Dataset):
-    def __init__(self, dataset_name: Optional[str] = None, path: Optional[str] = None):
+    def __init__(self, dataset_name: Optional[str] = None, path: Optional[str] = None, context_column_name="reference_contexts", query_column_name="query" ):
         if path is None and dataset_name is None:
             raise ValueError("Either path or dataset_name must be provided")
         if path is not None and dataset_name is not None:
@@ -41,6 +41,8 @@ class LlamaIndexDataset(Dataset):
         parser = SentenceSplitter()
         nodes = parser.get_nodes_from_documents(documents)
         self.documents = [TextNode(id=node.id_, text=node.text) for node in nodes]
+        self.context_column = context_column_name
+        self.query_column = query_column_name
 
     def to_pandas(self):
         return self.dataset.to_pandas()
@@ -53,11 +55,11 @@ class LlamaIndexDataset(Dataset):
     
     @property
     def context_column_name(self):
-        return "reference_contexts"
+        return self.context_column
     
     @property
     def query_column_name(self):
-        return "query"
+        return self.query_column
     
     @property
     def answer_column_name(self):
