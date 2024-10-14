@@ -40,6 +40,7 @@ class LlamaIndexDataset(Dataset):
 
         parser = SentenceSplitter()
         nodes = parser.get_nodes_from_documents(documents)
+        self.nodes = nodes
         self.documents = [TextNode(id=node.id_, text=node.text) for node in nodes]
         self.context_column = context_column_name
         self.query_column = query_column_name
